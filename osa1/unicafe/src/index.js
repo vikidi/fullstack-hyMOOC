@@ -21,13 +21,15 @@ const Statistics = ({numbers}) => {
   else {
     return (
       <table>
-        <StatisticLine  text="Good" number={numbers.good} />
-        <StatisticLine  text="Neutral" number={numbers.neutral} />
-        <StatisticLine  text="Bad" number={numbers.bad} />
-        
-        <StatisticLine  text="Total" number={total(arr)} />
-        <StatisticLine  text="Average" number={average(numbers)} />
-        <StatisticLine  text="Percentage" number={percentage(numbers.good, arr)} postText="%" />
+        <tbody>
+          <StatisticLine  text="Good" number={numbers.good} />
+          <StatisticLine  text="Neutral" number={numbers.neutral} />
+          <StatisticLine  text="Bad" number={numbers.bad} />
+          
+          <StatisticLine  text="Total" number={total(arr)} />
+          <StatisticLine  text="Average" number={average(numbers)} />
+          <StatisticLine  text="Percentage" number={percentage(numbers.good, arr)} postText="%" />
+        </tbody>
       </table>
     )
   }
