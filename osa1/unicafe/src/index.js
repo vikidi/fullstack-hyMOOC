@@ -13,7 +13,27 @@ const Button = ({handleClick, text}) => {
   )
 }
 
-const Stats = ({text, number, postText}) => <p>{text} {number} {postText}</p>
+const Statistics = ({numbers}) => {
+  let arr = [numbers.good, numbers.neutral, numbers.bad]
+
+  if (total(arr) === 0) return ( <p>No feedback given</p> )
+
+  else {
+    return (
+      <>
+        <Stat text="Good" number={numbers.good} />
+        <Stat text="Neutral" number={numbers.neutral} />
+        <Stat text="Bad" number={numbers.bad} />
+        
+        <Stat text="Total" number={total(arr)} />
+        <Stat text="Average" number={average(numbers)} />
+        <Stat text="Percentage" number={percentage(numbers.good, arr)} postText="%" />
+      </>
+    )
+  }
+}
+
+const Stat = ({text, number, postText}) => <p>{text} {number} {postText}</p>
 
 /* FUNCTIONS */
 
@@ -26,13 +46,10 @@ function total(numbers) {
 }
 
 function average(numbers) {
-  let tot = total([numbers.good, numbers.neutral, numbers.bad])
-  if (tot === 0) return 0;
   return (numbers.good - numbers.bad) / total([numbers.good, numbers.neutral, numbers.bad])
 }
 
 function percentage(ref, all) {
-  if (total(all) === 0) return 0
   return ref / total(all)
 }
 
@@ -54,13 +71,7 @@ const App = () => {
 
       <Header text="Statistics" />
 
-      <Stats text="Good" number={good} />
-      <Stats text="Neutral" number={neutral} />
-      <Stats text="Bad" number={bad} />
-      
-      <Stats text="Total" number={total([good, neutral, bad])} />
-      <Stats text="Average" number={average({good: good, neutral: neutral, bad: bad})} />
-      <Stats text="Percentage" number={percentage(good, [good, neutral, bad])} postText="%" />
+      <Statistics numbers={{good: good, neutral: neutral, bad: bad}} />
     </div>
   )
 }
