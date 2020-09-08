@@ -20,20 +20,27 @@ const Statistics = ({numbers}) => {
 
   else {
     return (
-      <>
-        <Stat text="Good" number={numbers.good} />
-        <Stat text="Neutral" number={numbers.neutral} />
-        <Stat text="Bad" number={numbers.bad} />
+      <table>
+        <StatisticLine  text="Good" number={numbers.good} />
+        <StatisticLine  text="Neutral" number={numbers.neutral} />
+        <StatisticLine  text="Bad" number={numbers.bad} />
         
-        <Stat text="Total" number={total(arr)} />
-        <Stat text="Average" number={average(numbers)} />
-        <Stat text="Percentage" number={percentage(numbers.good, arr)} postText="%" />
-      </>
+        <StatisticLine  text="Total" number={total(arr)} />
+        <StatisticLine  text="Average" number={average(numbers)} />
+        <StatisticLine  text="Percentage" number={percentage(numbers.good, arr)} postText="%" />
+      </table>
     )
   }
 }
 
-const Stat = ({text, number, postText}) => <p>{text} {number} {postText}</p>
+const StatisticLine  = ({text, number, postText}) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{number} {postText}</td>
+    </tr>
+  )
+}
 
 /* FUNCTIONS */
 
