@@ -7,7 +7,27 @@ function getRandom() {
   return Math.floor(Math.random() * anecdotes.length)
 }
 
+function indexOfMax(arr) {
+  if (arr.length === 0) {
+      return -1;
+  }
+
+  var max = arr[0];
+  var maxIndex = 0;
+
+  for (let i = 1; i < arr.length; ++i) {
+      if (arr[i] > max) {
+          maxIndex = i;
+          max = arr[i];
+      }
+  }
+
+  return maxIndex;
+}
+
 /* COMPONENTS */
+
+const Header = ({text}) => <h1>{text}</h1>
 
 const Button = ({text, handleClick}) => {
   return (
@@ -29,6 +49,8 @@ const App = (props) => {
 
   return (
     <div>
+      <Header text="Anecdote of the day" />
+
       <div>
         {props.anecdotes[selected]}
         <p>Has {points[selected]} points.</p>
@@ -36,6 +58,13 @@ const App = (props) => {
       
       <Button handleClick={() => vote()} text="Vote" />
       <Button handleClick={() => setSelected(getRandom())} text="Next anecdote" />
+
+      <Header text="Anecdote with most votes" />
+
+      <div>
+        {props.anecdotes[indexOfMax(points)]}
+        <p>Has {points[indexOfMax(points)]} points.</p>
+      </div>
     </div>
   )
 }
