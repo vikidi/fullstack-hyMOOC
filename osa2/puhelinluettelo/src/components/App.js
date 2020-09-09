@@ -12,15 +12,17 @@ const Numbers = ({numbers}) => {
 
 const Number = ({number}) => {
     return (
-        <p>{number.name}</p>
+        <p>{number.name} {number.number}</p>
     )
 }
 
 const App = () => {
   const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas',
+    number:'044-3111725' }
   ])
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
   const addPerson = (event) => {
       event.preventDefault()
@@ -29,12 +31,14 @@ const App = () => {
         window.alert(`${newName} is already added to the phonebook!`)
       }
       else {
-        setPersons(persons.concat({name: newName}))
+        setPersons(persons.concat({name: newName, number: newNumber}))
         setNewName('')
+        setNewNumber('')
       }
   }
 
   const handleNameChange = (event) => setNewName(event.target.value)
+  const handleNumberChange = (event) => setNewNumber(event.target.value)
 
   return (
     <div>
@@ -42,7 +46,10 @@ const App = () => {
 
         <form onSubmit={addPerson}>
             <div>
-                name: <input value={newName} onChange={handleNameChange} />
+                Name: <input value={newName} onChange={handleNameChange} />
+            </div>
+            <div>
+                Number: <input value={newNumber} onChange={handleNumberChange} />
             </div>
             <div>
                 <button type="submit">add</button>
