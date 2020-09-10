@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import PersonService from '../services/persons'
 
 const Header = ({text}) => <h2>{text}</h2>
 
@@ -53,12 +53,19 @@ const App = () => {
         event.preventDefault()
 
         if (persons.find(elem => elem.name === newName) !== undefined) {
-        window.alert(`${newName} is already added to the phonebook!`)
+            alert(`${newName} is already added to the phonebook!`)
         }
         else {
-        setPersons(persons.concat({name: newName, number: newNumber}))
-        setNewName('')
-        setNewNumber('')
+            PersonService
+            .addPerson({name: newName, number: newNumber})
+            .then(response => {
+                setPersons(persons.concat(response))
+                setNewName('')
+                setNewNumber('')
+            })
+            .catch(err => {
+                alert('Error occurred while adding new person')
+            })
         }
     }
 
@@ -70,10 +77,13 @@ const App = () => {
     }
 
     useEffect(() => {
-        axios
-        .get('http://localhost:3001/persons')
+        PersonService
+        .getAllPersons()
         .then(response => {
-            setPersons(response.data)
+            setPersons(response)
+        })
+        .catch(err => {
+            alert('Error occurred while fetching data')
         })
     }, [])
 
