@@ -56,8 +56,20 @@ const App = () => {
     const addPerson = (event) => {
         event.preventDefault()
 
-        if (persons.find(elem => elem.name === newName) !== undefined) {
-            alert(`${newName} is already added to the phonebook!`)
+        const person = persons.find(elem => elem.name === newName)
+        if (person !== undefined) {
+            // Replace
+            if (window.confirm(`${newName} is already added to phonebook, relpace the old number with a new one?`)) {
+                PersonService
+                .updatePerson({...person, number: newNumber})
+                .then(response => {
+                    setPersons(persons.map(p => p.id !== person.id ? p : response))
+                })
+                .catch(err => {
+                    alert('Error occurred while updating number')
+                    setPersons(persons.filter(p => person.id !== p.id))
+                })
+            }
         }
         else {
             PersonService
