@@ -29,6 +29,27 @@ const Filter = ({preText, value, onChangeHandler}) => {
     )
 }
 
+const Notification = ({ message, success }) => {
+    if (message === null) {
+      return null
+    }
+    
+    if (success) {
+        return (
+            <div className="success">
+                {message}
+            </div>
+        )
+    }
+    else {
+        return (
+            <div className="error">
+              {message}
+            </div>
+        )
+    }
+  }
+
 const PersonForm = (props) => {
     return (
         <form onSubmit={props.submitHandler}>
@@ -53,6 +74,9 @@ const App = () => {
 
     const [ nameFilter, setNameFilter ] = useState('')
 
+    const [errorMessage, setErrorMessage] = useState(null)
+    const [successMessage, setSuccessMessage] = useState(null)
+
     const addPerson = (event) => {
         event.preventDefault()
 
@@ -64,10 +88,11 @@ const App = () => {
                 .updatePerson({...person, number: newNumber})
                 .then(response => {
                     setPersons(persons.map(p => p.id !== person.id ? p : response))
+                    setSuccess(`Number updated for ${person.name}`)
                 })
                 .catch(err => {
-                    alert('Error occurred while updating number')
                     setPersons(persons.filter(p => person.id !== p.id))
+                    setError(`${person.name} was not found`)
                 })
             }
         }
@@ -78,9 +103,10 @@ const App = () => {
                 setPersons(persons.concat(response))
                 setNewName('')
                 setNewNumber('')
+                setSuccess(`${newName} added`)
             })
             .catch(err => {
-                alert('Error occurred while adding new person')
+                setError(`Failed to add ${newName}`)
             })
         }
     }
@@ -90,6 +116,12 @@ const App = () => {
             // Accepted delete
             PersonService
             .deletePerson(person.id)
+            .then(response => {
+                setSuccess(`${person.name} deleted`)
+            })
+            .catch(err => {
+                setError(`${person.name} has already been deleted`)
+            })
             .finally(() => {
                 // Same handling in success and fail
                 setPersons(persons.filter(p => person.id !== p.id))
@@ -104,6 +136,20 @@ const App = () => {
         setNameFilter(event.target.value)
     }
 
+    const setError = msg => {
+        setErrorMessage(msg)
+        setTimeout(() => {
+            setErrorMessage(null)
+        }, 5000)
+    }
+
+    const setSuccess = msg => {
+        setSuccessMessage(msg)
+        setTimeout(() => {
+            setSuccessMessage(null)
+        }, 5000)
+    }
+
     useEffect(() => {
         PersonService
         .getAllPersons()
@@ -111,12 +157,15 @@ const App = () => {
             setPersons(response)
         })
         .catch(err => {
-            alert('Error occurred while fetching data')
+            setError('Error while loading data')
         })
     }, [])
 
     return (
         <div>
+            <Notification message={errorMessage} success={false} />
+            <Notification message={successMessage} success={true} />
+
             <Header text="Phonebook" />
 
             <Filter preText="Filter names with " value={nameFilter} onChangeHandler={handleFilterChange} /> 
