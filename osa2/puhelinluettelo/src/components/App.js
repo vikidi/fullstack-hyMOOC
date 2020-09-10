@@ -3,17 +3,21 @@ import PersonService from '../services/persons'
 
 const Header = ({text}) => <h2>{text}</h2>
 
-const Numbers = ({numbers}) => {
+const Numbers = ({numbers, deleteClickHandler}) => {
     return (
         <div>
-            {numbers.map(number => <Number key={number.name} number={number} />)}
+            {numbers.map(number => <Number key={number.id} number={number} deleteClickHandler={deleteClickHandler} />)}
         </div>
     )
 }
 
-const Number = ({number}) => {
+const Number = ({number, deleteClickHandler}) => {
     return (
-        <p>{number.name} {number.number}</p>
+        <div>
+            {number.name + ' '}
+            {number.number + ' '}
+            <button onClick={() => deleteClickHandler(number)}>Delete</button>
+        </div>
     )
 }
 
@@ -69,6 +73,18 @@ const App = () => {
         }
     }
 
+    const deletePerson = person => {
+        if (window.confirm(`Delete ${person.name}?`)) {
+            // Accepted delete
+            PersonService
+            .deletePerson(person.id)
+            .finally(() => {
+                // Same handling in success and fail
+                setPersons(persons.filter(p => person.id !== p.id))
+            })
+        }
+    }
+
     const handleNameChange = (event) => setNewName(event.target.value)
     const handleNumberChange = (event) => setNewNumber(event.target.value)
 
@@ -103,7 +119,8 @@ const App = () => {
 
             <Header text="Numbers" />
             
-            <Numbers numbers={persons.filter(num => num.name.toLowerCase().includes(nameFilter))} />
+            <Numbers numbers={persons.filter(num => num.name.toLowerCase().includes(nameFilter))} 
+                     deleteClickHandler={deletePerson} />
 
         </div>
     )

@@ -6,9 +6,18 @@ const getAllPersons = () => {
     return req.then(response => response.data)
 }
 
-const addPerson = (newPerson) => {
+const addPerson = newPerson => {
     const req = axios.post(baseUrl, newPerson)
     return req.then(response => response.data)
 }
 
-export default { getAllPersons, addPerson }
+const deletePerson = id => {
+    const req = axios.delete(`${baseUrl}/${id}`)
+    return req.then(response => response.data)
+}
+
+const updatePerson = newPerson => {
+    return null
+}
+
+export default { getAllPersons, addPerson, deletePerson, updatePerson }
