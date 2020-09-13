@@ -106,7 +106,7 @@ const App = () => {
                 setSuccess(`${newName} added`)
             })
             .catch(err => {
-                setError(`Failed to add ${newName}`)
+                setError(err.response.data.error)
             })
         }
     }
