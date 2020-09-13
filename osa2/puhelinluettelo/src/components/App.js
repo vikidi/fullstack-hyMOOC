@@ -180,7 +180,7 @@ const App = () => {
 
             <Header text="Numbers" />
             
-            <Numbers numbers={persons.filter(num => num.name.toLowerCase().includes(nameFilter))} 
+            <Numbers numbers={persons.filter(num => num.name.toLowerCase().includes(nameFilter.toLowerCase()))} 
                      deleteClickHandler={deletePerson} />
 
         </div>
