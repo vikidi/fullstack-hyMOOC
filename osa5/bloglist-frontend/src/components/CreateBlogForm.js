@@ -12,7 +12,6 @@ const CreateBlogForm = ({ setBlogs, setErrorMessage, setSuccessMessage, toggleVi
 
         try {
             const blog = await blogService.create({ title, author, url })
-            const blogs = await blogService.getAll()
 
             setSuccessMessage(`a new blog '${blog.title}' by ${blog.author} created`)
 
@@ -22,7 +21,7 @@ const CreateBlogForm = ({ setBlogs, setErrorMessage, setSuccessMessage, toggleVi
 
             toggleVisibility()
 
-            setBlogs(blogs)
+            setBlogs()
         } catch (exception) {
             console.log(exception)
             setErrorMessage('wrong credentials')

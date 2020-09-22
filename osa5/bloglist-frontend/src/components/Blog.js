@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import blogs from '../services/blogs'
 
 import blogService from '../services/blogs'
 
@@ -27,8 +26,7 @@ const Blog = ({ blog, setBlogs }) => {
 
     await blogService.update(blog.id, newBlog)
 
-    const blogs = await blogService.getAll()
-    setBlogs(blogs)
+    setBlogs()
   }
 
   const fullBlog = () => (

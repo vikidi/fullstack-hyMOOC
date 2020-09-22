@@ -20,6 +20,16 @@ const App = () => {
   // Not in use
   //const blogFormRef = useRef()
 
+  const updateBlogs = async () => {
+    const blogs = await blogService.getAll()
+
+    blogs.sort((a, b) => {
+      return b.likes - a.likes
+    })
+
+    setBlogs(blogs)
+  }
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     blogService.setToken(null)
@@ -50,9 +60,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    updateBlogs()  
   }, [])
 
   if (user === null) {
@@ -81,7 +89,7 @@ const App = () => {
       <Togglable buttonLabel={'Create new'} /* ref={blogFormRef} */ >
 
         <CreateBlogForm 
-          setBlogs={setBlogs} 
+          setBlogs={updateBlogs} 
           setErrorMessage={setError} 
           setSuccessMessage={setSuccess} />
 
@@ -90,7 +98,7 @@ const App = () => {
       <br></br>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
+        <Blog key={blog.id} blog={blog} setBlogs={updateBlogs} />
       )}
 
     </div>
