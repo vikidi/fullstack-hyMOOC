@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, /* useRef */ } from 'react'
 
 import './App.css'
 
@@ -6,6 +6,7 @@ import Blog from './components/Blog'
 import CreateBlogForm from './components/CreateBlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
 
@@ -15,6 +16,9 @@ const App = () => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+
+  // Not in use
+  //const blogFormRef = useRef()
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -27,14 +31,14 @@ const App = () => {
     setTimeout(() => {
         setErrorMessage(null)
     }, 5000)
-}
+  }
 
-const setSuccess = msg => {
-    setSuccessMessage(msg)
-    setTimeout(() => {
-        setSuccessMessage(null)
-    }, 5000)
-}
+  const setSuccess = msg => {
+      setSuccessMessage(msg)
+      setTimeout(() => {
+          setSuccessMessage(null)
+      }, 5000)
+  }
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -72,8 +76,16 @@ const setSuccess = msg => {
       {user.name} is logged in <button onClick={handleLogout}>logout</button>
 
       <br></br>
+      <br></br>
 
-      <CreateBlogForm setBlogs={setBlogs} setErrorMessage={setError} setSuccessMessage={setSuccess} />
+      <Togglable buttonLabel={'Create new'} /* ref={blogFormRef} */ >
+
+        <CreateBlogForm 
+          setBlogs={setBlogs} 
+          setErrorMessage={setError} 
+          setSuccessMessage={setSuccess} />
+
+      </Togglable>
 
       <br></br>
 

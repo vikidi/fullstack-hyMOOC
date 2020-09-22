@@ -15,9 +15,11 @@ const LoginForm = ({ setUser, setErrorMessage }) => {
 
             window.localStorage.setItem('loggedUser', JSON.stringify(loginUser))
             blogService.setToken(loginUser.token)
-            setUser(loginUser)
+
             setUsername('')
             setPassword('')
+
+            setUser(loginUser)
         } catch (exception) {
             setErrorMessage('wrong credentials')
             setTimeout(() => {
