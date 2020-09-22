@@ -71,7 +71,7 @@ const App = () => {
       <Notification message={errorMessage} success={false} />
       <Notification message={successMessage} success={true} />
 
-      <h2>blogs</h2>
+      <h2>Blogs</h2>
 
       {user.name} is logged in <button onClick={handleLogout}>logout</button>
 
@@ -90,7 +90,7 @@ const App = () => {
       <br></br>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
       )}
 
     </div>

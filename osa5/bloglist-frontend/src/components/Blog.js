@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import blogs from '../services/blogs'
+
+import blogService from '../services/blogs'
 
 const Button = ({ onClick, text }) => {
   return (
@@ -6,15 +9,26 @@ const Button = ({ onClick, text }) => {
   )
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, setBlogs }) => {
   const [ fullView, setFullView ] = useState(false)
 
   const toggleView = () => {
     setFullView(!fullView)
   }
 
-  const handleLike = () => {
+  const handleLike = async () => {
+    const newBlog = { 
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id
+    }
 
+    await blogService.update(blog.id, newBlog)
+
+    const blogs = await blogService.getAll()
+    setBlogs(blogs)
   }
 
   const fullBlog = () => (
