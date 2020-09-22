@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import blogService from '../services/blogs'
 
-const CreateBlogForm = ({ setBlogs }) => {
+const CreateBlogForm = ({ setBlogs, setErrorMessage, setSuccessMessage }) => {
     const [title, setTitle] = useState('') 
     const [author, setAuthor] = useState('') 
     const [url, setUrl] = useState('') 
@@ -11,17 +11,21 @@ const CreateBlogForm = ({ setBlogs }) => {
         event.preventDefault()
 
         try {
-            await blogService.create({ title, author, url })
+            const blog = await blogService.create({ title, author, url })
             const blogs = await blogService.getAll()
+
             setBlogs(blogs)
+
+            setSuccessMessage(`a new blog '${blog.title}' by ${blog.author} created`)
 
             setTitle('')
             setAuthor('')
             setUrl('')
         } catch (exception) {
-            //setErrorMessage('wrong credentials')
+            console.log(exception)
+            setErrorMessage('wrong credentials')
             setTimeout(() => {
-            //setErrorMessage(null)
+                setErrorMessage(null)
             }, 5000)
         }
     }
