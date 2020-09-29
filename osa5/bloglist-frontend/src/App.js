@@ -36,6 +36,20 @@ const App = () => {
     setUser(null)
   }
 
+  const handleLike = async (blog) => {
+    const newBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id
+    }
+
+    await blogService.update(blog.id, newBlog)
+
+    updateBlogs()
+  }
+
   const setError = msg => {
     setErrorMessage(msg)
     setTimeout(() => {
@@ -98,7 +112,7 @@ const App = () => {
       <br></br>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} setBlogs={updateBlogs} loggedUser={user} />
+        <Blog key={blog.id} blog={blog} setBlogs={updateBlogs} loggedUser={user} likeHandler={handleLike} />
       )}
 
     </div>

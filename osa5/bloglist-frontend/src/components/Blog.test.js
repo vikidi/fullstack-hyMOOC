@@ -14,7 +14,7 @@ describe('<Blog />', () => {
     }
 
     const component = render(
-      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} />
+      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} likeHandler={() => {}} />
     )
 
     const content = component.container.querySelector('.blog').textContent
@@ -34,7 +34,7 @@ describe('<Blog />', () => {
     }
 
     const component = render(
-      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} />
+      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} likeHandler={() => {}} />
     )
 
     const button = component.getByText('view')
@@ -45,5 +45,30 @@ describe('<Blog />', () => {
     expect(content).toContain(blog.author)
     expect(content).toContain(blog.likes)
     expect(content).toContain(blog.url)
+  })
+
+  test('Pressing like twice triggers event handler twice', async () => {
+    const blog = {
+      title: 'Component testing is done with react-testing-library',
+      author: 'Ville Saarinen',
+      likes: 3,
+      url: 'localhost',
+      user: 'some user'
+    }
+
+    const mockFunc = jest.fn()
+
+    const component = render(
+      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} likeHandler={mockFunc} />
+    )
+
+    const viewButton = component.getByText('view')
+    fireEvent.click(viewButton)
+
+    const likeButton = component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(mockFunc.mock.calls).toHaveLength(2)
   })
 })

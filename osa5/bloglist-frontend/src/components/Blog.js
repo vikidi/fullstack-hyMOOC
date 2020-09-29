@@ -14,31 +14,18 @@ const Button = ({ onClick, text }) => {
   )
 }
 
-const Blog = ({ blog, setBlogs, loggedUser }) => {
+const Blog = ({ blog, setBlogs, loggedUser, likeHandler }) => {
   Blog.propTypes = {
     blog: PropTypes.object.isRequired,
     setBlogs: PropTypes.func.isRequired,
-    loggedUser: PropTypes.object.isRequired
+    loggedUser: PropTypes.object.isRequired,
+    likeHandler: PropTypes.func.isRequired
   }
 
   const [ fullView, setFullView ] = useState(false)
 
   const toggleView = () => {
     setFullView(!fullView)
-  }
-
-  const handleLike = async () => {
-    const newBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id
-    }
-
-    await blogService.update(blog.id, newBlog)
-
-    setBlogs()
   }
 
   const handleDelete = async () => {
@@ -53,7 +40,7 @@ const Blog = ({ blog, setBlogs, loggedUser }) => {
     <div className='blog'>
       {blog.title} {blog.author} <Button onClick={toggleView} text={fullView ? 'hide' : 'view'} /> <br></br>
       {blog.url} <br></br>
-      likes {blog.likes} <Button onClick={handleLike} text='like' /> <br></br>
+      likes {blog.likes} <Button onClick={() => likeHandler(blog)} text='like' /> <br></br>
       {blog.user.name}
       { loggedUser.username === blog.user.username && <div><Button onClick={handleDelete} text={'remove'} /></div> }
     </div>
