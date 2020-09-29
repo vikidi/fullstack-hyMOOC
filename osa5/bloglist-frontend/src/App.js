@@ -39,15 +39,15 @@ const App = () => {
   const setError = msg => {
     setErrorMessage(msg)
     setTimeout(() => {
-        setErrorMessage(null)
+      setErrorMessage(null)
     }, 5000)
   }
 
   const setSuccess = msg => {
-      setSuccessMessage(msg)
-      setTimeout(() => {
-          setSuccessMessage(null)
-      }, 5000)
+    setSuccessMessage(msg)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
   }
 
   useEffect(() => {
@@ -60,16 +60,16 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    updateBlogs()  
+    updateBlogs()
   }, [])
 
   if (user === null) {
-    return ( 
+    return (
       <div>
         <Notification message={errorMessage} success={false} />
         <Notification message={successMessage} success={true} />
 
-        <LoginForm setUser={setUser} setErrorMessage={setError} /> 
+        <LoginForm setUser={setUser} setErrorMessage={setError} />
       </div>
     )
   }
@@ -88,9 +88,9 @@ const App = () => {
 
       <Togglable buttonLabel={'Create new'} /* ref={blogFormRef} */ >
 
-        <CreateBlogForm 
-          setBlogs={updateBlogs} 
-          setErrorMessage={setError} 
+        <CreateBlogForm
+          setBlogs={updateBlogs}
+          setErrorMessage={setError}
           setSuccessMessage={setSuccess} />
 
       </Togglable>

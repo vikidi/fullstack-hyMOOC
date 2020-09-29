@@ -1,14 +1,26 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 import blogService from '../services/blogs'
 
 const Button = ({ onClick, text }) => {
+  Button.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    text: PropTypes.string.isRequired
+  }
+
   return (
     <button onClick={onClick}>{text}</button>
   )
 }
 
 const Blog = ({ blog, setBlogs, loggedUser }) => {
+  Blog.propTypes = {
+    blog: PropTypes.object.isRequired,
+    setBlogs: PropTypes.func.isRequired,
+    loggedUser: PropTypes.object.isRequired
+  }
+
   const [ fullView, setFullView ] = useState(false)
 
   const toggleView = () => {
@@ -16,7 +28,7 @@ const Blog = ({ blog, setBlogs, loggedUser }) => {
   }
 
   const handleLike = async () => {
-    const newBlog = { 
+    const newBlog = {
       title: blog.title,
       author: blog.author,
       url: blog.url,
@@ -30,7 +42,7 @@ const Blog = ({ blog, setBlogs, loggedUser }) => {
   }
 
   const handleDelete = async () => {
-    if (window.confirm(`Remove blog '${blog.title}' by ${blog.author}`)) { 
+    if (window.confirm(`Remove blog '${blog.title}' by ${blog.author}`)) {
       await blogService.deleteBlog(blog.id)
 
       setBlogs()
@@ -42,7 +54,7 @@ const Blog = ({ blog, setBlogs, loggedUser }) => {
       {blog.title} {blog.author} <Button onClick={toggleView} text={fullView ? 'hide' : 'view'} /> <br></br>
       {blog.url} <br></br>
       likes {blog.likes} <Button onClick={handleLike} text='like' /> <br></br>
-      {blog.user.name} 
+      {blog.user.name}
       { loggedUser.username === blog.user.username && <div><Button onClick={handleDelete} text={'remove'} /></div> }
     </div>
   )
