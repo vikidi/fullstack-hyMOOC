@@ -8,7 +8,7 @@ const Button = ({ onClick, text }) => {
   )
 }
 
-const Blog = ({ blog, setBlogs }) => {
+const Blog = ({ blog, setBlogs, loggedUser }) => {
   const [ fullView, setFullView ] = useState(false)
 
   const toggleView = () => {
@@ -29,12 +29,21 @@ const Blog = ({ blog, setBlogs }) => {
     setBlogs()
   }
 
+  const handleDelete = async () => {
+    if (window.confirm(`Remove blog '${blog.title}' by ${blog.author}`)) { 
+      await blogService.deleteBlog(blog.id)
+
+      setBlogs()
+    }
+  }
+
   const fullBlog = () => (
     <div className='blog'>
       {blog.title} {blog.author} <Button onClick={toggleView} text={fullView ? 'hide' : 'view'} /> <br></br>
       {blog.url} <br></br>
       likes {blog.likes} <Button onClick={handleLike} text='like' /> <br></br>
-      {blog.user.name}
+      {blog.user.name} 
+      { loggedUser.username === blog.user.username && <div><Button onClick={handleDelete} text={'remove'} /></div> }
     </div>
   )
 
