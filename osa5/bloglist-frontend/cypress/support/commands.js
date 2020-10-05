@@ -23,3 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('createUser', (user) => {
+  cy.request({
+    url: 'http://localhost:3001/api/users/',
+    method: 'POST',
+    body: { username: user.username, name: user.name, password: user.password }
+  })
+})
