@@ -40,7 +40,7 @@ const Blog = ({ blog, setBlogs, loggedUser, likeHandler }) => {
     <div className='blog'>
       {blog.title} {blog.author} <Button onClick={toggleView} text={fullView ? 'hide' : 'view'} /> <br></br>
       {blog.url} <br></br>
-      likes {blog.likes} <Button onClick={() => likeHandler(blog)} text='like' /> <br></br>
+      likes <span className='likes' >{blog.likes}</span> <Button onClick={() => likeHandler(blog)} text='like' /> <br></br>
       {blog.user.name}
       { loggedUser.username === blog.user.username && <div><Button onClick={handleDelete} text={'remove'} /></div> }
     </div>

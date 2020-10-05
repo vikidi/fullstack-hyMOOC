@@ -90,6 +90,53 @@ describe('Blog app', function() {
         cy.get('html')
           .should('not.contain', 'Test Blog Title Test Author')
       })
+
+      it('Blogs are sorted by likes', function() {
+        const blogsToBeAdded = [
+          {
+            title: 'First blog',
+            author: 'First Author',
+            url: 'First url',
+            likes: 5
+          },
+          {
+            title: 'Second blog',
+            author: 'Second Author',
+            url: 'Second url',
+            likes: 2
+          }
+        ]
+
+        for (let blog of blogsToBeAdded) {
+          cy.createBlog({ title: blog.title, author: blog.author, url: blog.url, likes: blog.likes })
+        }
+
+        cy.get('.blog')
+          .then(blogs => {
+
+            let counter = 0
+            for (let blog of blogs) {
+              cy.wrap(blog)
+                .contains('view')
+                .click()
+
+              if (counter !== 0) { // Don't check at the first one
+                cy.get('.likes')
+                  .eq(-2) // Get the second last
+                  .invoke('text')
+                  .then(parseFloat)
+                  .then(($prev) => {
+                    cy.get('.likes:last')
+                      .invoke('text')
+                      .then(parseFloat)
+                      .should('be.lt', $prev + 1)
+                  })
+              }
+
+              ++counter
+            }
+          })
+      })
     })
   })
 })
