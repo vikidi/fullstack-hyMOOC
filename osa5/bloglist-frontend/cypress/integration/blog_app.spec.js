@@ -33,7 +33,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.login({ username: 'test', password: 'test_pass' })
     })
@@ -47,6 +47,34 @@ describe('Blog app', function() {
       cy.get('#createButton').click()
 
       cy.contains('Test Blog Title Test Author')
+    })
+
+    describe('and a blog is created', function() {
+      beforeEach(function() {
+        cy.createBlog({
+          title: 'Test Blog Title',
+          author: 'Test Author',
+          url: 'Test url'
+        })
+      })
+
+      it('A blog can be liked', function() {
+        cy.contains('Test Blog Title Test Author').as('theBlog')
+
+        cy.get('@theBlog')
+          .contains('view')
+          .click()
+
+        cy.get('@theBlog')
+          .should('contain', 'likes 0')
+
+        cy.get('@theBlog')
+          .contains('like')
+          .click()
+
+        cy.get('@theBlog')
+          .should('contain', 'likes 1')
+      })
     })
   })
 })
