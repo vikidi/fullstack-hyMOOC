@@ -50,6 +50,18 @@ const App = () => {
     updateBlogs()
   }
 
+  const CreateBlog = async (newBlog) => {
+    try {
+      const b = await blogService.create(newBlog)
+
+      setSuccess(`a new blog '${b.title}' by ${b.author} created`)
+
+      updateBlogs()
+    } catch (exception) {
+      setError('wrong credentials')
+    }
+  }
+
   const setError = msg => {
     setErrorMessage(msg)
     setTimeout(() => {
@@ -103,9 +115,7 @@ const App = () => {
       <Togglable buttonLabel={'Create new'} /* ref={blogFormRef} */ >
 
         <CreateBlogForm
-          setBlogs={updateBlogs}
-          setErrorMessage={setError}
-          setSuccessMessage={setSuccess} />
+          CreateBlog={CreateBlog} />
 
       </Togglable>
 
