@@ -17,7 +17,9 @@
     "test": "cross-env CI=true react-scripts test",
     "test:full": "cross-env CI=true react-scripts test \"--coverage\"",
     "eject": "react-scripts eject",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,6 +40,8 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
+    "cypress": "^5.3.0",
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-jest": "^24.0.2"
   }
 }
