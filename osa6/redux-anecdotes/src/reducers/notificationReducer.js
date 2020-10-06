@@ -1,8 +1,4 @@
-const initialState = null
-
-export const DEFAULT_NOTIF_TIME = 5000
-
-const reducer = (state = initialState, action) => {
+const reducer = (state = null, action) => {
   switch (action.type) {
 
     case 'CREATE_NOTIFICATION':
@@ -16,17 +12,19 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export const createNotification = msg => {
-  return ({
-    type: 'CREATE_NOTIFICATION',
-    data: msg
-  })
-}
-
-export const removeNotification = () => {
-  return ({
-    type: 'REMOVE_NOTIFICATION'
-  })
+export const setNotification = (msg, time) => {
+  return async dispatch => {
+    dispatch({
+      type: 'CREATE_NOTIFICATION',
+      data: msg
+    })
+    
+    setTimeout(() => {
+      dispatch({
+        type: 'REMOVE_NOTIFICATION'
+      })
+    }, (time * 1000))
+  }
 }
 
 export default reducer
