@@ -39,6 +39,11 @@
       "content": "test",
       "votes": 0,
       "id": 7
+    },
+    {
+      "content": "test with connect",
+      "votes": 1,
+      "id": 8
     }
   ]
 }
