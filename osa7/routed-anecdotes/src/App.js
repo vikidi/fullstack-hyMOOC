@@ -59,9 +59,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content  = useField('content')
-  const author = useField('author')
-  const info = useField('info')
+  const [content, resetContent] = useField('content')
+  const [author, resetAuthor] = useField('author')
+  const [info, resetInfo] = useField('info')
 
 
   const handleSubmit = (e) => {
@@ -72,6 +72,12 @@ const CreateNew = (props) => {
       info: info.value,
       votes: 0
     })
+  }
+
+  const reset = () => {
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -90,7 +96,8 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='button' onClick={reset}>reset</button>
       </form>
     </div>
   )
