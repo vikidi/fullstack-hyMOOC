@@ -1,4 +1,4 @@
-import React, { useState, useEffect, /* useRef */ } from 'react'
+import React, { useEffect, /* useRef */ } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import './App.css'
@@ -9,29 +9,26 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
-import blogService from './services/blogs'
-
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs, createBlog, likeBlog } from './reducers/blogReducer'
+import { logout, initUser } from './reducers/userReducer'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-
   const dispatch = useDispatch()
+
   const blogs = useSelector(state => {
     return state.blogs.sort((a, b) => {
       return b.likes - a.likes
     })
   })
   const notification = useSelector(state => state.notification)
+  const user = useSelector(state => state.user)
 
   // Not in use
   //const blogFormRef = useRef()
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    blogService.setToken(null)
-    setUser(null)
+    dispatch(logout())
   }
 
   const handleLike = async (blog) => {
@@ -47,15 +44,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      blogService.setToken(user.token)
-      setUser(user)
-    }
-  }, [])
-
-  useEffect(() => {
+    dispatch(initUser())
     dispatch(initBlogs())
   }, [dispatch])
 
@@ -64,7 +53,7 @@ const App = () => {
       <div>
         {notification && <Notification message={notification.msg} success={!notification.error} />}
 
-        <LoginForm setUser={setUser} setNotification={setNotif} />
+        <LoginForm setNotification={setNotif} />
       </div>
     )
   }

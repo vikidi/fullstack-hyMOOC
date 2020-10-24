@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import blogService from '../services/blogs'
 import loginService from '../services/login'
 
-const LoginForm = ({ setUser, setNotification }) => {
+import { login } from '../reducers/userReducer'
+
+const LoginForm = ({ setNotification }) => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -13,13 +16,10 @@ const LoginForm = ({ setUser, setNotification }) => {
     try {
       const loginUser = await loginService.login({ username, password })
 
-      window.localStorage.setItem('loggedUser', JSON.stringify(loginUser))
-      blogService.setToken(loginUser.token)
-
       setUsername('')
       setPassword('')
 
-      setUser(loginUser)
+      dispatch(login(loginUser))
     } catch (exception) {
       setNotification('wrong credentials', true)
     }

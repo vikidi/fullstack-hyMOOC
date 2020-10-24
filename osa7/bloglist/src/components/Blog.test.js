@@ -2,6 +2,8 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
+import { Provider } from 'react-redux'
+import store from '../store'
 
 describe('<Blog />', () => {
   test('Correct content is renderer at first', async () => {
@@ -14,7 +16,9 @@ describe('<Blog />', () => {
     }
 
     const component = render(
-      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} likeHandler={() => {}} />
+      <Provider store={store} >
+        <Blog blog={blog} loggedUser={{}} likeHandler={() => {}} />
+      </Provider>
     )
 
     const content = component.container.querySelector('.blog').textContent
@@ -34,7 +38,9 @@ describe('<Blog />', () => {
     }
 
     const component = render(
-      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} likeHandler={() => {}} />
+      <Provider store={store} >
+        <Blog blog={blog} loggedUser={{}} likeHandler={() => {}} />
+      </Provider>
     )
 
     const button = component.getByText('view')
@@ -59,7 +65,9 @@ describe('<Blog />', () => {
     const mockFunc = jest.fn()
 
     const component = render(
-      <Blog blog={blog} setBlogs={() => {}} loggedUser={{}} likeHandler={mockFunc} />
+      <Provider store={store} >
+        <Blog blog={blog} loggedUser={{}} likeHandler={mockFunc} />
+      </Provider>
     )
 
     const viewButton = component.getByText('view')
