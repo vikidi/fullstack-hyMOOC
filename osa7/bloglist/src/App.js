@@ -12,26 +12,21 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
 import { setNotification } from './reducers/notificationReducer'
+import { initBlogs, createBlog, likeBlog } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
+  const blogs = useSelector(state => {
+    return state.blogs.sort((a, b) => {
+      return b.likes - a.likes
+    })
+  })
   const notification = useSelector(state => state.notification)
 
   // Not in use
   //const blogFormRef = useRef()
-
-  const updateBlogs = async () => {
-    const blogs = await blogService.getAll()
-
-    blogs.sort((a, b) => {
-      return b.likes - a.likes
-    })
-
-    setBlogs(blogs)
-  }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -40,29 +35,11 @@ const App = () => {
   }
 
   const handleLike = async (blog) => {
-    const newBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id
-    }
-
-    await blogService.update(blog.id, newBlog)
-
-    updateBlogs()
+    dispatch(likeBlog(blog))
   }
 
   const CreateBlog = async (newBlog) => {
-    try {
-      const b = await blogService.create(newBlog)
-
-      setNotif(`a new blog '${b.title}' by ${b.author} created`)
-
-      updateBlogs()
-    } catch (exception) {
-      setNotif('wrong credentials', true)
-    }
+    dispatch(createBlog(newBlog, user))
   }
 
   const setNotif = (msg, error = false) => {
@@ -79,8 +56,8 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    updateBlogs()
-  }, [])
+    dispatch(initBlogs())
+  }, [dispatch])
 
   if (user === null) {
     return (
@@ -113,7 +90,7 @@ const App = () => {
       <br></br>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} setBlogs={updateBlogs} loggedUser={user} likeHandler={handleLike} />
+        <Blog key={blog.id} blog={blog} loggedUser={user} likeHandler={handleLike} />
       )}
 
     </div>

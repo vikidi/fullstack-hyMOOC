@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
-import blogService from '../services/blogs'
+import { removeBlog } from '../reducers/blogReducer'
 
 const Button = ({ onClick, text }) => {
   Button.propTypes = {
@@ -14,26 +15,22 @@ const Button = ({ onClick, text }) => {
   )
 }
 
-const Blog = ({ blog, setBlogs, loggedUser, likeHandler }) => {
+const Blog = ({ blog, loggedUser, likeHandler }) => {
   Blog.propTypes = {
     blog: PropTypes.object.isRequired,
-    setBlogs: PropTypes.func.isRequired,
     loggedUser: PropTypes.object.isRequired,
     likeHandler: PropTypes.func.isRequired
   }
 
   const [ fullView, setFullView ] = useState(false)
+  const dispatch = useDispatch()
 
   const toggleView = () => {
     setFullView(!fullView)
   }
 
   const handleDelete = async () => {
-    if (window.confirm(`Remove blog '${blog.title}' by ${blog.author}`)) {
-      await blogService.deleteBlog(blog.id)
-
-      setBlogs()
-    }
+    dispatch(removeBlog(blog))
   }
 
   const fullBlog = () => (
