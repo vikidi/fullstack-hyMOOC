@@ -1,4 +1,5 @@
 import React, { useState, useEffect, /* useRef */ } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 import './App.css'
 
@@ -10,12 +11,14 @@ import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
 
+import { setNotification } from './reducers/notificationReducer'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state.notification)
 
   // Not in use
   //const blogFormRef = useRef()
@@ -54,26 +57,16 @@ const App = () => {
     try {
       const b = await blogService.create(newBlog)
 
-      setSuccess(`a new blog '${b.title}' by ${b.author} created`)
+      setNotif(`a new blog '${b.title}' by ${b.author} created`)
 
       updateBlogs()
     } catch (exception) {
-      setError('wrong credentials')
+      setNotif('wrong credentials', true)
     }
   }
 
-  const setError = msg => {
-    setErrorMessage(msg)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
-  }
-
-  const setSuccess = msg => {
-    setSuccessMessage(msg)
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 5000)
+  const setNotif = (msg, error = false) => {
+    dispatch(setNotification(msg, error))
   }
 
   useEffect(() => {
@@ -92,18 +85,16 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <Notification message={errorMessage} success={false} />
-        <Notification message={successMessage} success={true} />
+        {notification && <Notification message={notification.msg} success={!notification.error} />}
 
-        <LoginForm setUser={setUser} setErrorMessage={setError} />
+        <LoginForm setUser={setUser} setNotification={setNotif} />
       </div>
     )
   }
 
   return (
     <div>
-      <Notification message={errorMessage} success={false} />
-      <Notification message={successMessage} success={true} />
+      {notification && <Notification message={notification.msg} success={!notification.error} />}
 
       <h2>Blogs</h2>
 
