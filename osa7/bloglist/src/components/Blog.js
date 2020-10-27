@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { removeBlog } from '../reducers/blogReducer'
+import { removeBlog, likeBlog } from '../reducers/blogReducer'
 
 const Button = ({ onClick, text }) => {
   Button.propTypes = {
@@ -15,43 +15,26 @@ const Button = ({ onClick, text }) => {
   )
 }
 
-const Blog = ({ blog, loggedUser, likeHandler }) => {
-  Blog.propTypes = {
-    blog: PropTypes.object.isRequired,
-    loggedUser: PropTypes.object.isRequired,
-    likeHandler: PropTypes.func.isRequired
-  }
-
-  const [ fullView, setFullView ] = useState(false)
+const Blog = ({ id }) => {
   const dispatch = useDispatch()
-
-  const toggleView = () => {
-    setFullView(!fullView)
-  }
+  const blog = useSelector(store => store.blogs.find(b => b.id === id))
+  const user = useSelector(store => store.user)
 
   const handleDelete = async () => {
     dispatch(removeBlog(blog))
   }
 
-  const fullBlog = () => (
-    <div className='blog'>
-      {blog.title} {blog.author} <Button onClick={toggleView} text={fullView ? 'hide' : 'view'} /> <br></br>
-      {blog.url} <br></br>
-      likes <span className='likes' >{blog.likes}</span> <Button onClick={() => likeHandler(blog)} text='like' /> <br></br>
-      {blog.user.name}
-      { loggedUser.username === blog.user.username && <div><Button onClick={handleDelete} text={'remove'} /></div> }
-    </div>
-  )
-
-  const shortBlog = () => (
-    <div className='blog'>
-      {blog.title} {blog.author} <Button onClick={toggleView} text={fullView ? 'hide' : 'view'} />
-    </div>
-  )
+  const handleLike = async () => {
+    dispatch(likeBlog(blog))
+  }
 
   return (
     <div>
-      {fullView ? fullBlog() : shortBlog()}
+      <h2>{blog.title}</h2>
+      <a href={blog.url}>{blog.url}</a> <br></br>
+      likes <span className='likes' >{blog.likes}</span> <Button onClick={() => handleLike(blog)} text='like' /> <br></br>
+      Added by {blog.user.name}
+      { user.username === blog.user.username && <div><Button onClick={handleDelete} text={'remove'} /></div> }
     </div>
   )
 }

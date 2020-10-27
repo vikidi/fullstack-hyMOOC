@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-import Blog from './Blog'
 import CreateBlogForm from './CreateBlogForm'
 import Togglable from './Togglable'
 
-import { createBlog, likeBlog } from '../reducers/blogReducer'
+import { createBlog } from '../reducers/blogReducer'
 
 const BlogList = () => {
   const dispatch = useDispatch()
@@ -15,10 +15,6 @@ const BlogList = () => {
       return b.likes - a.likes
     })
   })
-
-  const handleLike = async (blog) => {
-    dispatch(likeBlog(blog))
-  }
 
   const CreateBlog = async (newBlog) => {
     dispatch(createBlog(newBlog, user))
@@ -35,7 +31,7 @@ const BlogList = () => {
       <br></br>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} loggedUser={user} likeHandler={handleLike} />
+        <div key={blog.id} className='blog'><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></div>
       )}
     </div>
   )
