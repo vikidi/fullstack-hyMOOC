@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  Switch, Route, Link,
-  useRouteMatch,
-  useHistory
+  Switch, Route,
+  useRouteMatch
 } from 'react-router-dom'
 
 import './App.css'
@@ -14,10 +13,11 @@ import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import User from './components/User'
 import Blog from './components/Blog'
+import Menu from './components/Menu'
 
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
-import { logout, initUser } from './reducers/userReducer'
+import { initUser } from './reducers/userReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -30,10 +30,6 @@ const App = () => {
     dispatch(initBlogs())
   }, [dispatch])
 
-  const handleLogout = () => {
-    dispatch(logout())
-  }
-
   const setNotif = (msg, error = false) => {
     dispatch(setNotification(msg, error))
   }
@@ -43,11 +39,13 @@ const App = () => {
 
   return (
     <div>
+      <Menu />
+
       {notification && <Notification message={notification.msg} success={!notification.error} />}
 
       <h2>Blogs</h2>
 
-      {user ? <div>{user.name} is logged in <button onClick={handleLogout}>logout</button></div> : <LoginForm setNotification={setNotif} />}
+      {!user && <LoginForm setNotification={setNotif} />}
 
       <Switch>
         <Route path='/blogs/:id'>
@@ -58,6 +56,9 @@ const App = () => {
         </Route>
         <Route path='/users'>
           <UserList />
+        </Route>
+        <Route path='/blogs'>
+          <BlogList />
         </Route>
         <Route path='/'>
           <BlogList />
