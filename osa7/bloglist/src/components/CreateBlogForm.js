@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { Button, TextField } from '@material-ui/core'
+
+import { setNotification } from '../reducers/notificationReducer'
 
 const CreateBlogForm = ({ CreateBlog, toggleVisibility }) => {
+  const dispatch = useDispatch()
+
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -9,6 +16,8 @@ const CreateBlogForm = ({ CreateBlog, toggleVisibility }) => {
     event.preventDefault()
 
     CreateBlog({ title, author, url })
+
+    dispatch(setNotification(`New blog '${title}' created!`))
 
     setTitle('')
     setAuthor('')
@@ -21,11 +30,11 @@ const CreateBlogForm = ({ CreateBlog, toggleVisibility }) => {
 
   return (
     <div>
-      <h2>Create new blog</h2>
+      <h3>Create new blog</h3>
       <form onSubmit={handleCreate}>
         <div>
-              Title
-          <input
+          <TextField
+            label='Title'
             id='title'
             type='text'
             value={title}
@@ -34,8 +43,8 @@ const CreateBlogForm = ({ CreateBlog, toggleVisibility }) => {
           />
         </div>
         <div>
-              Author
-          <input
+          <TextField
+            label='Author'
             id='author'
             type='text'
             value={author}
@@ -44,8 +53,8 @@ const CreateBlogForm = ({ CreateBlog, toggleVisibility }) => {
           />
         </div>
         <div>
-              Url
-          <input
+          <TextField
+            label='Url'
             id='url'
             type='text'
             value={url}
@@ -53,7 +62,7 @@ const CreateBlogForm = ({ CreateBlog, toggleVisibility }) => {
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id='createButton' type='submit'>Create</button>
+        <Button style={{ margin: '5px' }} variant='contained' color='primary' id='createButton' type='submit'>Create</Button>
       </form>
     </div>
   )

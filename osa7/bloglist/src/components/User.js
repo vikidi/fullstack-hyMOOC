@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+import { List, ListItem } from '@material-ui/core'
+
 import userService from '../services/users'
 
 const UserList = ({ id }) => {
@@ -18,9 +20,9 @@ const UserList = ({ id }) => {
     <div>
       <h2>{user.name}</h2>
       <h4>Added blogs</h4>
-      <ul>
-        {user.blogs.map(b => <li key={b.id}>{b.title}</li>)}
-      </ul>
+      <List>
+        {user.blogs.map(b => <ListItem key={b.id}>- {b.title}</ListItem>)}
+      </List>
     </div>
   )
 }

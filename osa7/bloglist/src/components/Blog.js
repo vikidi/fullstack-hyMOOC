@@ -1,19 +1,9 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { Button, TextField, List, ListItem } from '@material-ui/core'
+
 import { removeBlog, likeBlog, postComment } from '../reducers/blogReducer'
-
-const Button = ({ onClick, text }) => {
-  Button.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    text: PropTypes.string.isRequired
-  }
-
-  return (
-    <button onClick={onClick}>{text}</button>
-  )
-}
 
 const Blog = ({ id }) => {
   const dispatch = useDispatch()
@@ -45,19 +35,19 @@ const Blog = ({ id }) => {
     <div>
       <h2>{blog.title}</h2>
       <a href={blog.url}>{blog.url}</a> <br></br>
-      likes <span className='likes' >{blog.likes}</span> <Button onClick={() => handleLike(blog)} text='like' /> <br></br>
+      likes <span className='likes' >{blog.likes}</span> <Button style={{ margin: '5px' }} variant='contained' color='primary' onClick={() => handleLike(blog)}>like</Button> <br></br>
       Added by {blog.user.name}
-      { user.username === blog.user.username && <div><Button onClick={handleDelete} text={'remove'} /></div> }
+      {user && user.username === blog.user.username && <div><Button style={{ margin: '5px' }} variant='contained' color='primary' onClick={handleDelete}>remove</Button></div> }
       <h3>Comments</h3>
 
       <form onSubmit={handleSubmit}>
-        <input name='comment' type='text' placeholder='comment...' value={comment} onChange={({ target }) => setComment(target.value)} />
-        <button type='submit'>Post comment</button>
+        <TextField variant='outlined' label='Comment' name='comment' type='text' value={comment} onChange={({ target }) => setComment(target.value)} />
+        <Button style={{ margin: '5px' }} variant='contained' color='primary' type='submit'>Post comment</Button>
       </form>
 
-      <ul>
-        {blog.comments.map((c, i) => <li key={i}>{c}</li>)}
-      </ul>
+      <List>
+        {blog.comments.map((c, i) => <ListItem key={i}>{`${i + 1}. ${c}`}</ListItem>)}
+      </List>
     </div>
   )
 }

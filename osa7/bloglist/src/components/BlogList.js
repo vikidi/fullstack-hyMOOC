@@ -5,7 +5,13 @@ import { Link } from 'react-router-dom'
 import CreateBlogForm from './CreateBlogForm'
 import Togglable from './Togglable'
 
+import { List, ListItem, Divider } from '@material-ui/core'
+
 import { createBlog } from '../reducers/blogReducer'
+
+const ListItemLink = props => {
+  return <ListItem button component={Link} {...props} />
+}
 
 const BlogList = () => {
   const dispatch = useDispatch()
@@ -22,17 +28,21 @@ const BlogList = () => {
 
   return (
     <div>
+      <h3>All Blogs</h3>
+
       <Togglable buttonLabel={'Create new'}>
 
         <CreateBlogForm CreateBlog={CreateBlog} />
 
       </Togglable>
 
-      <br></br>
+      <Divider />
 
-      {blogs.map(blog =>
-        <div key={blog.id} className='blog'><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></div>
-      )}
+      <List>
+        {blogs.map(blog =>
+          <ListItemLink key={blog.id} to={`/blogs/${blog.id}`}><u>{blog.title}</u></ListItemLink>
+        )}
+      </List>
     </div>
   )
 }
