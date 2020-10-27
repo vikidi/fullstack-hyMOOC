@@ -19,6 +19,9 @@ const reducer = (state = [], action) => {
   case 'LIKE_BLOG':
     return state.map(b => b.id === action.id ? { ...b, likes: b.likes + 1 } : b)
 
+  case 'POST_BLOG_COMMENT':
+    return state.map(b => b.id === action.id ? { ...b, comments: b.comments.concat(action.data) } : b)
+
   default:
     return state
   }
@@ -81,6 +84,18 @@ export const likeBlog = blog => {
     dispatch({
       type: 'LIKE_BLOG',
       id: blog.id
+    })
+  }
+}
+
+export const postComment = (id, text) => {
+  return async dispatch => {
+    await blogService.postComment(id, text)
+
+    dispatch({
+      type: 'POST_BLOG_COMMENT',
+      id,
+      data: text
     })
   }
 }
