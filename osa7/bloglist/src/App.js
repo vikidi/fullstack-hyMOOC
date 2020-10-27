@@ -12,6 +12,7 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
+import User from './components/User'
 
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
@@ -23,6 +24,11 @@ const App = () => {
   const notification = useSelector(state => state.notification)
   const user = useSelector(state => state.user)
 
+  useEffect(() => {
+    dispatch(initUser())
+    dispatch(initBlogs())
+  }, [dispatch])
+
   const handleLogout = () => {
     dispatch(logout())
   }
@@ -31,10 +37,7 @@ const App = () => {
     dispatch(setNotification(msg, error))
   }
 
-  useEffect(() => {
-    dispatch(initUser())
-    dispatch(initBlogs())
-  }, [dispatch])
+  const userMatch = useRouteMatch('/users/:id')
 
   return (
     <div>
@@ -45,6 +48,9 @@ const App = () => {
       {user ? <div>{user.name} is logged in <button onClick={handleLogout}>logout</button></div> : <LoginForm setNotification={setNotif} />}
 
       <Switch>
+        <Route path='/users/:id'>
+          <User id={userMatch ? userMatch.params.id : null} />
+        </Route>
         <Route path='/users'>
           <UserList />
         </Route>
